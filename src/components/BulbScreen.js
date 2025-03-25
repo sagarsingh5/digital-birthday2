@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import LazyLoad from 'react-lazyload';
 import { useNavigate } from 'react-router-dom';
 import '../styles/styles.css';
 
@@ -24,9 +23,31 @@ const BulbScreen = () => {
   const [candleImage, setCandleImage] = useState('/assets/cake.png');
   const [showMessageButton, setShowMessageButton] = useState(false);
   const [isShowingMessage, setIsShowingMessage] = useState(false);
-  const [messages, setMessages] = useState(["Happy Birthday to my wonderful best friend! 🎉🎂 Your friendship brings so much joy into my life. Wishing you a day filled with love, laughter, and unforgettable moments. May your day be as beautiful and vibrant as you are, and may the year ahead be filled with endless blessings and dreams fulfilled. Here's to celebrating you today and always! 🥳🎈"]);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [messageAnimation, setMessageAnimation] = useState(false);
+
+  const messages = [
+    "Happy Birthday, my love! 💖 Today is all about you!",
+    "Maria, you are the light of my life! 🌟",
+    "I hope this year brings you all the happiness you deserve! 🎉",
+    "You are the most beautiful person, inside and out! 😘",
+    "Every moment with you is magical! ✨",
+    "I feel so lucky to have you in my life! 🍀",
+    "Your smile is the sweetest gift I could ever receive! 😊",
+    "You make my world brighter every single day! ☀️",
+    "On this special day, I just want to say— I love you! 💕",
+    "May your dreams come true, today and always! 🌠",
+    "You are my happy place, Maria! 🏡💖",
+    "No distance can ever change how much I love you! 🌍❤️",
+    "I can't wait for all the birthdays we will celebrate together! 🎂",
+    "Your kindness, love, and care make the world a better place! 🌸",
+    "You deserve all the love and joy in the world today! 🎁",
+    "I wish I could hold you right now and whisper 'Happy Birthday' in your ear! 🤗",
+    "This day is special because YOU are special! 🎊",
+    "Maria, you are my everything, now and forever! 💞",
+    "May this birthday be just as sweet and amazing as you are! 🍰",
+    "I promise to always cherish and celebrate you, my queen! 👑❤️"
+  ];
 
   useEffect(() => {
     const bulbInterval = setInterval(() => {
@@ -41,7 +62,7 @@ const BulbScreen = () => {
       clearInterval(bulbInterval);
       clearTimeout(musicButtonTimeout);
     };
-  }, []);
+  }, [bulbImages.length]);
 
   useEffect(() => {
     if (showMessageButton) {
@@ -53,12 +74,45 @@ const BulbScreen = () => {
     };
   }, [showMessageButton]);
 
+  const backgrounds = [
+    "/assets/home1.jpeg",
+    "/assets/home2.jpeg",
+    "/assets/home3.jpeg",
+    "/assets/home4.jpeg",
+    "/assets/home5.jpeg",
+    "/assets/home6.jpeg",
+    "/assets/home7.jpeg",
+  ];
+  
+  const [currentBgIndex, setCurrentBgIndex] = useState(0);
+  const [fade, setFade] = useState(false);
+
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(true); // Start fade-out
+
+      setTimeout(() => {
+        setCurrentBgIndex((prev) => (prev + 1) % backgrounds.length);
+        setFade(false); // Start fade-in
+      }, 1000); // Match animation duration
+    }, 10000); // Change every 10 seconds
+
+    return () => clearInterval(interval);
+  }, [backgrounds.length]);
+
   const handleTurnOnMusic = () => {
-    const audio = new Audio('/assets/hbd.mp3');
+    const audio = new Audio('/assets/song.mp4');
     audio.play();
 
     setShowButton(false);
     setMusicPlayed(true);
+
+    setTimeout(() => {
+      audio.pause();
+      navigate("/");
+    }, 120000);
 
     setTimeout(() => {
       setShowButton(true);
@@ -138,20 +192,29 @@ const BulbScreen = () => {
         setShowMessageButton(true);
         setCurrentMessageIndex(0);
       }
-    }, 1000);
+    }, 3000);
   };
 
   return (
     <div className={`bulb-container ${showButton ? 'show-button' : ''}`}>
+
+    {musicPlayed && (<div
+      className={`background ${fade ? "fade-out" : "fade-in"}`}
+      style={{ backgroundImage: `url(${backgrounds[currentBgIndex]})` }}
+    ></div>)}
+
+
       {bulbImages.map((imageName, index) => (
-        <LazyLoad key={index} height={100} offset={[-100, 100]} placeholder={<div className="bulb" />}>
+        <div key={index} className="bulb-wrapper">
           <img
             className={`bulb ${index === currentBulbIndex ? 'highlight' : ''}`}
             src={`assets/${index === currentBulbIndex ? 'bulb_white.png' : imageName}`}
             alt="Bulb"
           />
-        </LazyLoad>
+        </div>
       ))}
+
+
       {showIamGre && (
         <div className="iamgre-container">
           <img className="iamgre-image" src={candleImage} alt="Iamgre" />
@@ -232,10 +295,8 @@ const BulbScreen = () => {
       )}
       {isShowingMessage && (
         <div className={`message-container ${isShowingMessage ? 'show-message' : ''}`}>
-          {messages && messages.slice(0, currentMessageIndex).map((message, index) => (
-            <p key={index} className="message-line">{message}</p>
-          ))}
-        </div>
+        <p className="message-line">{messages[currentMessageIndex]}</p>
+      </div>
       )}
     </div>
   );
