@@ -119,7 +119,7 @@ const BulbScreen = () => {
         audioRef.current.currentTime = 0;
         navigate('/'); // Navigate to the home page
       }
-    }, 88000); // Stop after 236 seconds (3 minutes and 56 seconds)
+    }, 236000); // Stop after 236 seconds (3 minutes and 56 seconds)
 
     setTimeout(() => {
       setShowButton(true);
