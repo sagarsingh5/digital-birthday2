@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/styles.css';
 
@@ -28,7 +28,7 @@ const BulbScreen = () => {
 
   const messages = [
     "Happy Birthday, my love! 💖 Today is all about you!",
-    "Maria, you are the light of my life! 🌟",
+    "Smriti, you are the light of my life! 🌟",
     "I hope this year brings you all the happiness you deserve! 🎉",
     "You are the most beautiful person, inside and out! 😘",
     "Every moment with you is magical! ✨",
@@ -37,14 +37,14 @@ const BulbScreen = () => {
     "You make my world brighter every single day! ☀️",
     "On this special day, I just want to say— I love you! 💕",
     "May your dreams come true, today and always! 🌠",
-    "You are my happy place, Maria! 🏡💖",
+    "You are my happy place, Smriti! 🏡💖",
     "No distance can ever change how much I love you! 🌍❤️",
     "I can't wait for all the birthdays we will celebrate together! 🎂",
     "Your kindness, love, and care make the world a better place! 🌸",
     "You deserve all the love and joy in the world today! 🎁",
     "I wish I could hold you right now and whisper 'Happy Birthday' in your ear! 🤗",
     "This day is special because YOU are special! 🎊",
-    "Maria, you are my everything, now and forever! 💞",
+    "Smriti, you are my everything, now and forever! 💞",
     "May this birthday be just as sweet and amazing as you are! 🍰",
     "I promise to always cherish and celebrate you, my queen! 👑❤️"
   ];
@@ -102,17 +102,24 @@ const BulbScreen = () => {
     return () => clearInterval(interval);
   }, [backgrounds.length]);
 
+  const audioRef = useRef(null);
+  // const intervalRef = useRef(null);
+
   const handleTurnOnMusic = () => {
-    const audio = new Audio('/assets/song.mp4');
-    audio.play();
+    audioRef.current = new Audio('/assets/song.mp4'); // Use your desired song
+    audioRef.current.play();
 
     setShowButton(false);
     setMusicPlayed(true);
 
+    // Stop the song after 2 minutes (120,000 milliseconds)
     setTimeout(() => {
-      audio.pause();
-      navigate("/");
-    }, 120000);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        navigate('/'); // Navigate to the home page
+      }
+    }, 88000); // Stop after 236 seconds (3 minutes and 56 seconds)
 
     setTimeout(() => {
       setShowButton(true);
@@ -294,7 +301,7 @@ const BulbScreen = () => {
         </div>
       )}
       {isShowingMessage && (
-        <div className={`message-container ${isShowingMessage ? 'show-message' : ''}`}>
+        <div className={`message-container ${isShowingMessage ? 'show-message' : 'hide-message'}`}>
         <p className="message-line">{messages[currentMessageIndex]}</p>
       </div>
       )}

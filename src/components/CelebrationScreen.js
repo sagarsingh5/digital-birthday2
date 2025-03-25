@@ -18,7 +18,7 @@ const CelebrationScreen = () => {
 
   return (
     <div className="container">
-      <h1 className="header">✨ Maria, It's Your Special Day! ✨</h1>
+      <h1 className="header">✨ Smriti, It's Your Special Day! ✨</h1>
       <p className="subtext">The world shines brighter today because it's your birthday! 🎂💖</p>
       <div className="button-container">
         <button className="button" onClick={handleCelebrateClick}>
